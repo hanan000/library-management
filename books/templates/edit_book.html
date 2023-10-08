@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Book</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+
+            width: 150px;
+            display: inline-block;
+            text-align: left;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 75%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        input[type="date"] {
+            width: 75%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Book</h1>
+
+        <!-- Edit Book Form (without form tags) -->
+        <label for="new_title">Title:</label>
+        <input type="text" id="new_title" name="new_title" value="{{ book.title }}">
+        <br>
+        <br>
+        <label for="new_author">Author:</label>
+        <input type="text" id="new_author" name="new_author" value="{{ book.author }}">
+        <br>
+        <br>
+        <label for="new_date">Published Date:</label>
+        <input type="date" id="new_date" name="new_date" value="{{ book.published_date|date:'Y-m-d' }}">
+        <br>
+        <button onclick="updateBook()">Save Changes</button>
+
+        <a href="{% url 'index' %}">Back to Library</a>
+    </div>
+
+    <script>
+        function updateBook() {
+            var newTitle = document.getElementById('new_title').value;
+            var newAuthor = document.getElementById('new_author').value;
+            var newDate = document.getElementById('new_date').value
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{% url 'edit_book' book.id %}', true);
+            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+
+                    window.location.href = '{% url 'index' %}';
+                }
+            };
+            xhr.send('new_title=' + encodeURIComponent(newTitle) + '&new_author=' + encodeURIComponent(newAuthor)+
+            '&new_date=' + encodeURIComponent(newDate));
+        }
+    </script>
+</body>
+</html>

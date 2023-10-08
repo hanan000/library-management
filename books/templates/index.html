@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+
+    .library-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+    }
+
+    h1 {
+        color: #333;
+    }
+
+
+    .shelf-container {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    h2 {
+        color: #444;
+        margin-top: 0;
+    }
+
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        border: 1px solid #ddd;
+        background-color: #fff;
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        display: inline-block;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+
+    form {
+        display: inline-block;
+        margin-top: 10px;
+    }
+</style>
+
+</head>
+<body>
+    <div class="library-container">
+        <h1>Library</h1>
+
+        <!-- Create Book Form -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Book</button>
+        </form>
+
+        <!-- List of Shelves -->
+        <div class="shelf-container">
+            <h2>Art</h2>
+            <ul>
+                {% for book in books_art %}
+                    <li>
+                        {{ book.title }} by {{ book.author }}<br>
+                        Published Date: {{ book.published_date }}
+
+                        <form method="get" action="{% url 'edit_book' book.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Edit</button>
+                        </form>
+                        <form method="post" action="{% url 'delete_book' book.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="shelf-container">
+            <h2>Technology</h2>
+            <ul>
+                {% for book in books_technology %}
+                    <li>
+                        {{ book.title }} by {{ book.author }}<br>
+                        Published Date: {{ book.published_date }}
+
+                        <form method="get" action="{% url 'edit_book' book.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Edit</button>
+                        </form>
+                        <form method="post" action="{% url 'delete_book' book.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
